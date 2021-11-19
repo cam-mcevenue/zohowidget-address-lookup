@@ -1,6 +1,7 @@
 /node_modules/
 /app/build/
 /dist/
+/src/keys/
 
 *.pem
 
