@@ -34,15 +34,36 @@
     });
     
     export async function updateZohoRecord (props) {
-        config = {
-            Entity: entityType,
-            APIData:{
-                "id": entityId,
-                ...props
+        
+        if (entityType == "Deals") {
+            config = {
+                Entity: entityType,
+                APIData:{
+                    "id": entityId,
+                    "Street_Address" : place.components.number + " " + place.components.street,
+                    "City" : props.city,
+                    "Province" : props.province,
+                    "Postal_Code" : props.postal,
+                    "Country" : props.country,
+                    "Unit": props.unit
+                }
             }
-        }
+        } 
 
-        console.log(config);
+        if (entityType == "Contacts") {
+            config = {
+                Entity: entityType,
+                APIData:{
+                    "id": entityId,
+                    "Mailing_Street" : props.number + " " + props.street,
+                    "Mailing_City" : props.city,
+                    "Mailing_State" : props.province,
+                    "Mailing_Zip" : props.postal,
+                    "Mailing_Country" : props.country,
+                    "Mailing_Unit_Number": props.unit
+                }
+            }
+        } 
         
         response = await ZOHO.CRM.API.updateRecord(config);
         let code = response.data[0].code;

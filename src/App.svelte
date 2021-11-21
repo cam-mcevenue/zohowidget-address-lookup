@@ -69,14 +69,8 @@
 		let form_valid = validateAddressInput();
 		
 		if (form_valid) {
-			zohoUtils.updateZohoRecord({
-				"Street_Address" : place.components.number + " " + place.components.street,
-				"City" : place.components.city,
-				"Province" : place.components.province,
-				"Postal_Code" : place.components.postal,
-				"Country" : place.components.country,
-				"Unit" : unitNumber,
-			});
+			place.components.unit = unitNumber,
+			zohoUtils.updateZohoRecord(place.components);
 		}
 		
 	}
