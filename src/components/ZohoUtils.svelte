@@ -18,7 +18,7 @@
 
     ZOHO.embeddedApp.on("PageLoad", function(data) {
 
-        ZOHO.CRM.UI.Resize({height: 440, width: 1350});
+        ZOHO.CRM.UI.Resize({height: 440, width: 1024});
         
         //add data to config object
         if ((typeof data.EntityId) === 'object'){
@@ -30,22 +30,24 @@
         }
     
         entityType = data.Entity;
+
+        dispatch('zoho-ready', {trigger : trigger});
         
     });
     
-    export async function updateZohoRecord (props) {
+    export async function updateZohoRecord (place_components) {
         
         if (entityType == "Deals") {
             config = {
                 Entity: entityType,
                 APIData:{
                     "id": entityId,
-                    "Street_Address" : place.components.number + " " + place.components.street,
-                    "City" : props.city,
-                    "Province" : props.province,
-                    "Postal_Code" : props.postal,
-                    "Country" : props.country,
-                    "Unit": props.unit
+                    "Street_Address" : place_components.number + " " + place_components.street,
+                    "City" : place_components.city,
+                    "Province" : place_components.province,
+                    "Postal_Code" : place_components.postal,
+                    "Country" : place_components.country,
+                    "Unit": place_components.unit
                 }
             }
         } 
@@ -55,12 +57,12 @@
                 Entity: entityType,
                 APIData:{
                     "id": entityId,
-                    "Mailing_Street" : props.number + " " + props.street,
-                    "Mailing_City" : props.city,
-                    "Mailing_State" : props.province,
-                    "Mailing_Zip" : props.postal,
-                    "Mailing_Country" : props.country,
-                    "Mailing_Unit_Number": props.unit
+                    "Mailing_Street" : place_components.number + " " + place_components.street,
+                    "Mailing_City" : place_components.city,
+                    "Mailing_State" : place_components.province,
+                    "Mailing_Zip" : place_components.postal,
+                    "Mailing_Country" : place_components.country,
+                    "Mailing_Unit_Number": place_components.unit
                 }
             }
         } 

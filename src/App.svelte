@@ -18,6 +18,7 @@
 	let error_msg;
 	let zohoUtils;
 	let zohoResponse;
+	let zohoContext;
 
 	function handleAddressChange (event) {
 		place = event.detail.place;
@@ -31,19 +32,6 @@
 		valid_address = false;
 		error_msg = event.detail.message;
 		document.querySelector('.pac-input').classList.add('is-danger');
-	}
-
-	function handleZohoResponse(event) {
-		console.log(event.detail);
-		zohoResponse = event.detail;
-
-		if (zohoResponse.code == 'error') {
-			return
-		} 
-
-		if (zohoResponse.trigger == 'blueprint') {
-			ZOHO.CRM.BLUEPRINT.proceed();
-		}
 	}
 
 	function validateAddressInput () {
@@ -79,6 +67,24 @@
 		ZOHO.CRM.UI.Popup.close();
 	}
 
+	function handleZohoResponse(event) {
+		zohoResponse = event.detail;
+
+		if (zohoResponse.code == 'error') {
+			return
+		} 
+
+		if (zohoResponse.trigger == 'blueprint') {
+			ZOHO.CRM.BLUEPRINT.proceed();
+		}
+	}
+
+	function zohoReady (event) {
+		if (event.detail.trigger === 'blueprint') {
+			zohoContext = 'blueprint';
+		}
+	}
+
 </script>
 
 <svelte:head>
@@ -98,6 +104,9 @@
 	<section class="section p-0" style="height: 100vh;">
 		<div class="is-flex is-flex-direction-row is-height-100-p">
 			<div class="column is-two-fifths is-flex is-flex-direction-column is-justify-content-center">
+				{#if zohoContext === 'blueprint'}
+					<h2 class="title is-4">Update the address for this deal:</h2>
+				{/if}
 				<div class="field">
 					<label class="label">Unit # (optional)</label>
 					<div class="control has-icons-left">
@@ -146,7 +155,7 @@
 	</section>
 {/if}
 
-<ZohoUtils bind:this={zohoUtils} on:zoho-response={handleZohoResponse} />
+<ZohoUtils bind:this={zohoUtils} on:zoho-ready={zohoReady} on:zoho-response={handleZohoResponse} />
 
 
 
